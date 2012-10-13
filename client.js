@@ -198,7 +198,21 @@
   App.LectionView = Ember.View.extend({
       tagName: 'li',
 
-      buttonClass: 'visible',
+      classNameBindings: ['isDifferentDay:next-block'],
+
+      isDifferentDay: function() {
+        // not sure if it's the ember-way to do it
+        var index = this.getPath('_parentView.contentIndex');
+        if (index === 0 || App.lections.get('filterBy')) {
+          // do not separate when displaying search results
+          return false;
+        } else {
+          return Math.abs(
+            App.lections.objectAt(index - 1).get('date') -
+            this.get('lection').get('date')
+          ) > 86400000; // one day
+        }
+      }.property('App.lections.@each', 'App.lections.filterBy'),
 
       selectionChange: function(a) {
         this.$().toggleClass('selected', this.get('isSelected'));
