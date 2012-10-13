@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Bootstrap 101 Template</title>
+    <!-- Bootstrap -->
+    <link href="lib/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="http://addyosmani.github.com/jquery-ui-bootstrap/css/custom-theme/jquery-ui-1.8.16.custom.css">
+    <link href="http://ivaynberg.github.com/select2/select2-3.2/select2.css" rel="stylesheet">
+  </head>
+  <body>
+   
+	<script type="text/javascript" src="lib/handlebars-1.0.rc.1.js"></script>
+	<script type="text/javascript" src="lib/jquery-1.8.2.min.js"></script>
+	<script type="text/javascript" src="lib/jquery-ui-1.9.0.custom.min.js"></script>
+	<script src="http://ivaynberg.github.com/select2/select2-3.2/select2.js"></script>
+
+
+	<script type="text/javascript" src="lib/epiceditor/js/epiceditor.js"></script>
+
+	<script type="text/javascript" src="lib/ember-1.0.pre.min.js"></script>
+
+    <style>
+    	.highlight {
+    		color: red;
+    	}
+
+    	.lections {
+    		height: 500px;
+    		overflow-y: scroll;
+    	}
+
+    	.edit {
+    		visibility: hidden;
+    		cursor: pointer;
+    	}
+
+    	.lection {
+    		padding: 6px;
+    	}
+
+    	.selected {
+    		color: white;
+    		background-color: #3875D7;
+    	}
+
+		.selected a:link    {color:white;}
+		.selected a:visited {color:white;}
+		.selected a:hover   {color:white;}
+		.selected a:active  {color:white;}
+    </style>
+
+    <script type="text/javascript" src="data.js"></script>
+    <script type="text/javascript" src="client.js"></script>
+
+    <div class="container">
+		<script type="text/x-handlebars">
+		
+		{{view Ember.TextField valueBinding="App.lections.filterBy" placeholder="Найдется все" class="input-large search-query"}}
+
+		{{#view App.LectionsView filteredBinding="App.lections.filtered" class="unstyled lections"}}
+			{{#each view.filtered}}
+
+				{{#view App.LectionView lectionBinding="this" class="lection span10"}}
+					<span class="span1">{{when view.lection.date}}</span>
+
+					<span class="span4">
+						<i class="icon-search edit"
+							{{action searchLecturer}}
+							{{bindAttr class="view.isSelected:icon-white"}} title="Искать по автору"></i>
+						<i class="icon-trash edit"
+							{{action removeItem}}
+							{{bindAttr class="view.isSelected:icon-white"}} title="Удалить"></i>
+						<a href="#" class="lection">{{view.lection.title}}</a>
+					</span>
+
+					{{#if App.lections.filterBy}}
+						{{{quoted view.lection.searchFragment}}}
+
+						{{#if view.lection.author.hasSearchFragment}}
+							{{highlight view.lection.author.name}}
+						{{/if}}
+					{{else}}
+						{{#if App.lections.showLecturers}}
+							 {{view.lection.author.name}}
+						{{/if}}
+					{{/if}}
+
+				{{/view}}
+
+			{{/each}}
+		{{/view}}
+
+		</script>
+	</div>
+
+  </body>
+</html>
