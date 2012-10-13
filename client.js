@@ -56,7 +56,7 @@
           Number(parts[0])
         );
 
-        lection.author = App.authors.filter(equals('name', lection.author))[0];
+        // lection.author = App.authors.filter(equals('name', lection.author))[0];
 
         App.lections.add(App.lection.create(lection));
       });
@@ -103,7 +103,16 @@
   App.lection = Ember.Object.extend({
     title: null,
     date: null,
-    author: null,
+    authorName: null,
+
+    author: function(key, value) {
+      if (arguments.length === 1) {
+        return App.authors.filter(equals('name', this.authorName))[0] || App.author.create({name: this.authorName});
+      } else {
+        this.set('authorName', value);
+        return value;
+      }
+    }.property('authorName'),
 
     note: null,
 
@@ -171,10 +180,11 @@
       }
 
       return this.filter(function(item, idx, en) {
+        var author = item.get('author');
         return (item.titleStartsWith(filterBy) ||
             item.hasText(filterBy) ||
-            (item.author && item.author.startsWith(filterBy)) ||
-            (item.author && item.author.nick.toLowerCase().startsWith(filterBy)));
+            (author && author.startsWith(filterBy)) ||
+            (author.nick && author.nick.toLowerCase().startsWith(filterBy)));
       });
     }).property('filterBy', 'content.@each').cacheable()
   });
@@ -254,6 +264,51 @@
 
   App.LectionsView = Ember.View.extend({
     tagName: 'ul'
+  });
+
+
+  App.CurrentView = Ember.View.extend({
+
+  });
+
+  App.AuthorView = Ember.TextField.extend({
+    valueBinding: "selected.authorName",
+
+    focusIn: function() {
+      this.saved = this.get('value');
+    },
+
+    focusOut: function() {
+      if (this.get('value').length === 0 && this.saved) {
+        this.set('value', this.saved);
+      }
+    },
+
+    didInsertElement: function() {
+      var that = this;
+
+      this.$().autocomplete({
+        delay: 0,
+
+        source: function(request, response) {
+          var filteredArray = authors.filter(function(item) {
+
+            // creepy, regexp?
+            return request.term.toLowerCase().split(' ').every(function(part) {
+              return item.name.toLowerCase().split(' ').some(function(namePart) {
+                return namePart.startsWith(part);
+              });
+            });
+
+          });
+          response(filteredArray.map(function(item) { return item.name; }));
+        },
+
+        select: function(e, ui) {
+          that.set('value', ui.item.value);
+        }
+      });
+    }
   });
 
 })();
