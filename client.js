@@ -33,8 +33,13 @@
     return function(w) { return w[prop] === value; };
   }
 
+  // ES6 shim
   String.prototype.startsWith = function(start) {
     return this.slice(0, start.length) == start;
+  };
+
+  String.prototype.contains = function(fragment) {
+    return this.indexOf(fragment) !== -1;
   };
 
   window.App = Ember.Application.create({
@@ -71,8 +76,8 @@
     nick: null,
 
     startsWith: function(start) {
-      if (start.indexOf(' ') !== -1) {
-        return this.name.toLowerCase().indexOf(start) !== -1;
+      if (start.contains(' ')) {
+        return this.name.toLowerCase().contains(start);
       }
 
       return this.name.toLowerCase().split(' ').some(function(part) {
@@ -103,6 +108,11 @@
     note: null,
 
     titleStartsWith: function(start) {
+      if (start.contains(' ')) {
+        return this.title.toLowerCase().contains(start);
+      }
+
+
       return this.title.toLowerCase().split(' ').some(function(part) {
         return part.startsWith(start);
       });
@@ -133,7 +143,7 @@
         return false;
       }
 
-      return this.note.toLowerCase().indexOf(text.toLowerCase()) !== -1;
+      return this.note.toLowerCase().contains(text.toLowerCase());
     }
   });
 
