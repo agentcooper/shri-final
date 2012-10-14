@@ -48,7 +48,7 @@
     </div>
 
     <p></p>
-    <p>
+    <p class="top">
     {{view Ember.TextField valueBinding="App.lections.filterBy" placeholder="Найдется все" class="input-large search-query"}}
 
     {{#if view.back}}
@@ -103,7 +103,7 @@
       {{/each}}
     {{/view}}
 
-    <p class='pull-right'>
+    <p class='pull-right bottom'>
       <a href='#' {{action doExport}}>Импорт / экспорт</a>
       | <a href="#myModalx" data-toggle="modal">?</a>
     </p>

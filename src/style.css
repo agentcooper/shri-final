@@ -10,11 +10,13 @@ body {
 	color: #D14;
 }
 
-.lections {
-	height: 550px;
-	overflow-y: scroll;
-	box-shadow: #99A0A5 0 3px 10px;
-	background-color: white;
+@media screen {
+	.lections {
+		height: 550px;
+		overflow-y: scroll;
+		box-shadow: #99A0A5 0 3px 10px;
+		background-color: white;
+	}
 }
 
 .edit {
@@ -83,4 +85,13 @@ body {
 
 .modal-body {
     max-height: 800px;
+}
+
+@media print {
+	.top {
+		display: none;
+	}
+	.bottom {
+		display: none;
+	}
 }
