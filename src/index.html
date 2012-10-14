@@ -1,22 +1,21 @@
 <!DOCTYPE html>
 <html>
   <head>
-  	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
     <title>ШРИ</title>
     <link href="../lib/bootstrap/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" type="text/css" href="../lib/jquery-ui-1.9.0.custom/css/flick/jquery-ui-1.9.0.custom.min.css">
     <link rel="stylesheet" type="text/css" href="style.css">
 
     <script type="text/javascript" src="../lib/jquery-1.8.2.min.js"></script>
-	<script type="text/javascript" src="../lib/jquery-ui-1.9.0.custom/js/jquery-ui-1.9.0.custom.min.js"></script>
-	
-	<script type="text/javascript" src="../lib/handlebars-1.0.rc.1.js"></script>
-	<script type="text/javascript" src="../lib/ember-1.0.pre.min.js"></script>
+    <script type="text/javascript" src="../lib/jquery-ui-1.9.0.custom/js/jquery-ui-1.9.0.custom.min.js"></script>
+    <script type="text/javascript" src="../lib/handlebars-1.0.rc.1.js"></script>
+    <script type="text/javascript" src="../lib/ember-1.0.pre.min.js"></script>
 
-	<script type="text/javascript" src="../lib/epiceditor/js/epiceditor.js"></script>
+    <script type="text/javascript" src="../lib/epiceditor/js/epiceditor.js"></script>
 
-	<script type="text/javascript" src="data.js"></script>
-	<script type="text/javascript" src="helpers.js"></script>
+    <script type="text/javascript" src="data.js"></script>
+    <script type="text/javascript" src="helpers.js"></script>
 
     <script type="text/javascript" src="app.js"></script>
     <script type="text/javascript" src="lection.js"></script>
@@ -26,114 +25,67 @@
   </head>
   <body>
     <div class="container">
-		<script type="text/x-handlebars">
-		{{#view App.ApplicationView}}
+    <script type="text/x-handlebars">
+    {{#view App.ApplicationView}}
 
-		<p></p>
-		<p>
-		{{view Ember.TextField valueBinding="App.lections.filterBy" placeholder="Найдется все" class="input-large search-query"}}
+    <p></p>
+    <p>
+    {{view Ember.TextField valueBinding="App.lections.filterBy" placeholder="Найдется все" class="input-large search-query"}}
 
-		{{#if view.back}}
-			<a href="#" {{action reset}}>К списку лекций</a>
-		{{/if}}
+    {{#if view.back}}
+      <a href="#" {{action reset}}>К списку лекций</a>
+    {{/if}}
 
-		<a href="#" {{action add}} class="pull-right">Добавить</a>
+    <a href="#" {{action add}} class="pull-right">Добавить</a>
 
-		</p>
+    </p>
 
-		{{#view App.CurrentView currentBinding="App.lections.selected" class="editarea"}}
-			<p>{{view Ember.TextField valueBinding="view.current.title" class="editt span5"}}<p>
+    {{#view App.CurrentView currentBinding="App.lections.selected" class="editarea"}}
+      <p>{{view Ember.TextField valueBinding="view.current.title" class="editt span5"}}<p>
 
-			<p>{{view App.AuthorView selectedBinding="view.current" class="editt"}}</p>
-		
-			<p>{{view App.DatePicker selectedBinding="view.current" class="editt"}}</p>
+      <p>{{view App.AuthorView selectedBinding="view.current" class="editt"}}</p>
 
-			{{#view App.Editor}}
-				<div id="epiceditor"></div>
-			{{/view}}
-		{{/view}}
+      <p>{{view App.DatePicker selectedBinding="view.current" class="editt"}}</p>
 
+      {{#view App.Editor}}
+        <div id="epiceditor"></div>
+      {{/view}}
+    {{/view}}
 
-{{#view App.LectionsView filteredBinding="App.lections.filtered" class="unstyled lections"}}
-			{{#each view.filtered}}
+    {{#view App.LectionsView filteredBinding="App.lections.filtered" class="unstyled lections"}}
+      {{#each view.filtered}}
 
+        {{#view App.LectionView lectionBinding="this" class="lection span10"}}
+          <span class="span1">{{when view.lection.date}}</span>
 
+          <span class="span4">
+            <i class="icon-search edit"
+              {{action searchLecturer}}
+              {{bindAttr class="view.isSelected:icon-white"}} title="Искать по автору"></i>
+            <i class="icon-trash edit"
+              {{action removeItem}}
+              {{bindAttr class="view.isSelected:icon-white"}} title="Удалить"></i>
+            <a href="#" class="lection">{{view.lection.title}}</a>
+          </span>
 
-				{{#view App.LectionView lectionBinding="this" class="lection span10"}}
-					<span class="span1">{{when view.lection.date}}</span>
+          {{#if App.lections.filterBy}}
+            {{{quoted view.lection.searchFragment}}}
 
+            {{#if view.lection.author.hasSearchFragment}}
+              {{highlight view.lection.author.name}}
+            {{/if}}
+          {{else}}
+            {{#if App.lections.showLecturers}}
+               {{view.lection.author.name}}
+            {{/if}}
+          {{/if}}
+        {{/view}}
 
+      {{/each}}
+    {{/view}} 
 
-					<span class="span4">
-						<i class="icon-search edit"
-							{{action searchLecturer}}
-							{{bindAttr class="view.isSelected:icon-white"}} title="Искать по автору"></i>
-						<i class="icon-trash edit"
-							{{action removeItem}}
-							{{bindAttr class="view.isSelected:icon-white"}} title="Удалить"></i>
-						<a href="#" class="lection">{{view.lection.title}}</a>
-					</span>
-
-					{{#if App.lections.filterBy}}
-						{{{quoted view.lection.searchFragment}}}
-
-						{{#if view.lection.author.hasSearchFragment}}
-							{{highlight view.lection.author.name}}
-						{{/if}}
-					{{else}}
-						{{#if App.lections.showLecturers}}
-							 {{view.lection.author.name}}
-						{{/if}}
-					{{/if}}
-				{{/view}}
-
-			{{/each}}
-		{{/view}} 
-
-
-		{{/view}}
-		</script>
-	</div>
-
-
-
-<!-- 		{{#view App.LectionsView filteredBinding="App.lections.filtered" class="unstyled lections"}}
-			{{#each view.filtered}}
-
-				{{#view App.LectionView lectionBinding="this" class="lection span10"}}
-					<span class="span1">{{when view.lection.date}}</span>
-
-					<span class="span4">
-						<i class="icon-search edit"
-							{{action searchLecturer}}
-							{{bindAttr class="view.isSelected:icon-white"}} title="Искать по автору"></i>
-						<i class="icon-trash edit"
-							{{action removeItem}}
-							{{bindAttr class="view.isSelected:icon-white"}} title="Удалить"></i>
-						<a href="#" class="lection">{{view.lection.title}}</a>
-					</span>
-
-					{{#if App.lections.filterBy}}
-						{{{quoted view.lection.searchFragment}}}
-
-						{{#if view.lection.author.hasSearchFragment}}
-							{{highlight view.lection.author.name}}
-						{{/if}}
-					{{else}}
-						{{#if App.lections.showLecturers}}
-							 {{view.lection.author.name}}
-						{{/if}}
-					{{/if}}
-				{{/view}}
-
-			{{/each}}
-		{{/view}} 
-
-
-
-			{{#each App.lections.filtered}}
-		    <p>{{item.title}}</p>
-		{{/each}} -->
-
+    {{/view}}
+    </script>
+  </div>
   </body>
 </html>
