@@ -64,7 +64,7 @@ App.Editor = Ember.View.extend({
     Ember.run.next(function() {
       that.editor = new EpicEditor({
         clientSideStorage: false,
-        basePath: 'lib/epiceditor',
+        basePath: '../lib/epiceditor',
         focusOnLoad: false
       });
 
