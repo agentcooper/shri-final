@@ -62,12 +62,13 @@ body {
 }
 
 .editarea {
+	padding: 20px;
 	background-color: white;
 	height: 550px;
-	overflow-y: scroll;
 	box-shadow: #99A0A5 0 3px 10px;
 }
 
 #epiceditor {
+	border-top: 1px dashed gray;
 	visibility: hidden;
 }
