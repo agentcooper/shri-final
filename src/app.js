@@ -20,9 +20,12 @@
 
       this.loadData();
 
-      App.lections.addObserver('content.@each', function() {
-        App.save();
-      });
+      // there is probably a better way to handle this
+      App.lections.addObserver('content.@each', App.save.bind(this));
+      App.lections.addObserver('content.@each.title', App.save.bind(this));
+      App.lections.addObserver('content.@each.authorName', App.save.bind(this));
+      App.lections.addObserver('content.@each.date', App.save.bind(this));
+      App.lections.addObserver('content.@each.note', App.save.bind(this));
     },
 
     loadData: function() {
