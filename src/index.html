@@ -103,10 +103,27 @@
       {{/each}}
     {{/view}}
 
-    <p class='pull-right'><a href='#' {{action doExport}}>Импорт / экспорт</a></p>
+    <p class='pull-right'>
+      <a href='#' {{action doExport}}>Импорт / экспорт</a>
+      | <a href="#myModalx" data-toggle="modal">?</a>
+    </p>
 
     {{/view}}
     </script>
+
+    <div class="modal" id="myModalx" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+        <h3 id="myModalLabel">About</h3>
+      </div>
+      <div class="modal-body">
+        <p>Самое лучшее, что тут есть это поиск. Он ищет по названиям лекций, именам лекторов (имя и фамилия) и даже их никнеймам. А еще он ищет по содержимому заметок, можно поискать где рассказывали про git, Яндекс.Танк или Lisp.</p>
+
+        <p>А еще здесь есть markdown для заметок и это круто. Потому что с помощью него можно сидеть и записывать важное на лекции, а потом добавить ссылки на презентации и видео.</p>
+
+        <p>Enjoy.</p>
+      </div>
+    </div>
   </div>
   </body>
 </html>
