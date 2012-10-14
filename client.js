@@ -208,21 +208,21 @@
   App.LectionView = Ember.View.extend({
       tagName: 'li',
 
-      classNameBindings: ['isDifferentDay:next-block'],
-
       isDifferentDay: function() {
-        // not sure if it's the ember-way to do it
-        var index = this.getPath('_parentView.contentIndex');
+        var index = App.lections.indexOf(this.get('lection'));
+
         if (index === 0 || App.lections.get('filterBy')) {
           // do not separate when displaying search results
           return false;
-        } else {
-          return Math.abs(
-            App.lections.objectAt(index - 1).get('date') -
-            this.get('lection').get('date')
-          ) > 86400000; // one day
         }
+
+        return Math.abs(
+          App.lections.objectAt(index - 1).get('date') -
+          App.lections.objectAt(index).get('date')
+        ) > 1000 * 60 * 60 * 12;
       }.property('App.lections.@each', 'App.lections.filterBy'),
+
+      classNameBindings: ['isDifferentDay:next-block'],
 
       selectionChange: function(a) {
         this.$().toggleClass('selected', this.get('isSelected'));
@@ -247,7 +247,11 @@
       removeItem: function(e) {
         var that = this;
 
-        this.$().slideUp('fast', function() {
+        // console.log(this.get('isDifferentDay'));
+        // var index = App.lections.indexOf(this.get('lection'));
+        // App.lections.objectAt(index + 1).$().addClass('next-block');
+
+        this.$().fadeOut('fast', function() {
           App.lections.removeObject(that.get('lection'));
         });
 
