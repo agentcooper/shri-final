@@ -401,6 +401,12 @@
     back: function() {
       var filterBy = App.lections.get('filterBy');
       return App.lections.get('isSelected') || (filterBy && filterBy.length > 0);
-    }.property('App.lections.filterBy', 'App.lections.isSelected')
+    }.property('App.lections.filterBy', 'App.lections.isSelected'),
+
+    add: function() {
+      var fresh = App.lection.create({date: new Date(), title: 'Тема лекции', authorName: 'Автор'});
+      App.lections.add(fresh);
+      App.lections.set('selected', fresh);
+    }
   });
 })();

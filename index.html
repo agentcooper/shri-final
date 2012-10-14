@@ -23,13 +23,17 @@
     <div class="container">
 		<script type="text/x-handlebars">
 		{{#view App.ApplicationView}}
+
 		<p></p>
 		<p>
 		{{view Ember.TextField valueBinding="App.lections.filterBy" placeholder="Найдется все" class="input-large search-query"}}
 
 		{{#if view.back}}
-			 <a href="#" {{action reset}}>К списку лекций</a>
+			<a href="#" {{action reset}}>К списку лекций</a>
 		{{/if}}
+
+		<a href="#" {{action add}} class="pull-right">Добавить</a>
+
 		</p>
 
 		{{#view App.CurrentView currentBinding="App.lections.selected" class="editarea"}}
@@ -37,6 +41,7 @@
 
 			<p>{{view App.AuthorView selectedBinding="view.current" class="editt"}}</p>
 		
+			<p>{{view App.DatePicker selectedBinding="view.current" class="editt"}}</p>
 
 			{{#view App.Editor}}
 				<div id="epiceditor"></div>
