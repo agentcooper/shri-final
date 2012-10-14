@@ -1,0 +1,73 @@
+body {
+	background-image: url(img/groovepaper.png);
+}
+
+.time {
+	color: gray;
+}
+
+.highlight {
+	color: #D14;
+}
+
+.lections {
+	height: 550px;
+	overflow-y: scroll;
+	box-shadow: #99A0A5 0 3px 10px;
+	background-color: white;
+}
+
+.edit {
+	visibility: hidden;
+	cursor: pointer;
+}
+
+.lection {
+	padding: 6px;
+}
+
+.selected {
+	color: white;
+	background-color: #3875D7;
+}
+
+.selected a:link    {color:white;}
+.selected a:visited {color:white;}
+.selected a:hover   {color:white;}
+.selected a:active  {color:white;}
+
+.next-block {
+	margin-top: 20px;
+}
+
+.editt {
+	border: none !important;
+	box-shadow: none !important;
+}
+
+.editt:hover {
+	background-color: #FCF8E3;
+}
+
+.editt:focus {
+	background-color: #FCF8E3;
+}
+
+.blah {
+	color: #ADA7A7;
+}
+
+.hidden {
+	display: none;
+}
+
+.editarea {
+	background-color: white;
+	height: 550px;
+	overflow-y: scroll;
+	box-shadow: #99A0A5 0 3px 10px;
+}
+
+#epiceditor {
+	visibility: hidden;
+}
