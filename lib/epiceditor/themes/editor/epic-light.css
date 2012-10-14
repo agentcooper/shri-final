@@ -1,6 +1,9 @@
 html { padding:10px; }
 
 body {
+	font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
+
+	color: #555;
   border:0;
   background:#fcfcfc;
   font-family:monospace;

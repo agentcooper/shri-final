@@ -181,12 +181,27 @@
 
       return this.get('arrangedContent').filter(function(item) {
         var author = item.get('author');
+
         return (item.titleStartsWith(filterBy) ||
             item.hasText(filterBy) ||
-            (author && author.startsWith(filterBy)) ||
+            (author && author.startsWith(filterBy.toLowerCase())) ||
             (author.nick && author.nick.toLowerCase().startsWith(filterBy)));
       });
     }.property('content', 'filterBy').cacheable(),
+
+    isFiltering: function() {
+      var that = this;
+      Ember.run.next(function() {
+        var fb = that.get('filterBy');
+        if (fb && fb.length > 0) {
+          App.lections.set('selected', false);
+        }
+      });
+    }.observes('filterBy'),
+
+    isSelected: function() {
+      return !!this.get('selected');
+    }.property('selected')
   });
 
 
@@ -260,19 +275,24 @@
       },
 
       searchLecturer: function(e) {
-        console.dir(this);
         e.stopPropagation();
-        App.lections.set('filterBy', this.get('lection').author.name);
+        App.lections.set('filterBy', this.get('lection').authorName);
       }
   });
 
   App.LectionsView = Ember.View.extend({
-    tagName: 'ul'
+    tagName: 'ul',
+
+    classNameBindings: ['selected:hidden'],
+
+    selectedBinding: 'App.lections.selected'
   });
 
 
   App.CurrentView = Ember.View.extend({
+    classNameBindings: ['isSelected::hidden'],
 
+    isSelectedBinding: 'App.lections.isSelected'
   });
 
   App.AuthorView = Ember.TextField.extend({
@@ -315,5 +335,70 @@
     }
   });
 
-})();
+  App.Editor = Ember.View.extend({
+    editor: null,
 
+    setText: function(text) {
+      this.editor
+        .importFile('some-file', text)
+        .preview();
+    },
+
+    initEditor: function() {
+      var that = this;
+
+      // EpicEditor needs a visible element,
+      // so we need to defer init
+
+      Ember.run.next(function() {
+        that.editor = new EpicEditor({
+          clientSideStorage: false,
+          basePath: 'lib/epiceditor',
+          focusOnLoad: false
+        });
+
+        that.editor.on('load', function() {
+          that.setText(App.lections.get('selected').get('note'));
+          that.$('#epiceditor').css('visibility', 'visible');
+        });
+
+        that.editor.on('update', function(editor) {
+          App.lections.get('selected').set('note', editor.content);
+        });
+
+        that.editor.load();
+      });
+    },
+
+    selectionChanged: function() {
+      var selected = App.lections.get('selected');
+      if (!selected) {
+        return;
+      }
+
+      if (!this.editor) {
+        this.initEditor();
+      } else {
+        this.setText(selected.get('note'));
+      }
+
+    }.observes('App.lections.isSelected')
+  });
+
+  App.ApplicationView = Ember.View.extend({
+    reset: function() {
+      if (App.lections.get('selected')) {
+        App.lections.set('selected', false);
+      }
+      // @TODO: creepy, investigate more. UI jumps
+      Ember.run.next(function() {
+        App.lections.set('filterBy', '');
+      });
+    },
+
+    back: function() {
+      var filterBy = App.lections.get('filterBy');
+      return App.lections.get('isSelected') || (filterBy && filterBy.length > 0);
+    }.property('App.lections.filterBy', 'App.lections.isSelected')
+  });
+})();
