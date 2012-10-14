@@ -14,7 +14,7 @@ App.author = Ember.Object.extend({
 
   hasSearchFragment: function() {
     var filterBy = App.lections.get('filterBy').toLowerCase();
-    return this.startsWith(filterBy) || this.nick.startsWith(filterBy);
+    return this.startsWith(filterBy) || (this.nick && this.nick.startsWith(filterBy));
   }.property('App.lections.filterBy')
 });
 
