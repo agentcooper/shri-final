@@ -5,8 +5,10 @@
     bootstrap: function() {
       console.log('bootstraping');
 
-      localStorage.setItem('lections', JSON.stringify(lections));
-      localStorage.setItem('authors', JSON.stringify(authors));
+      if (typeof window.localStorage !== 'undefined') {
+        localStorage.setItem('lections', JSON.stringify(lections));
+        localStorage.setItem('authors', JSON.stringify(authors));
+      }
     },
 
     ready: function() {
@@ -57,18 +59,22 @@
       }
     },
 
+    savingChanges: true,
     save: function() {
       var serialized = this.serialize();
-      localStorage.setItem('lections', JSON.stringify(serialized.lections));
+
+      if (App.get('savingChanges')) {
+        localStorage.setItem('lections', JSON.stringify(serialized.lections));
+      }
     },
 
     serialize: function() {
       var data = {
         'lections': App.lections.get('content').map(function(item) {
           return {
-            'authorName': item.authorName,
-            'title': item.title,
-            'note': item.note,
+            'authorName': item.authorName || "",
+            'title': item.title || "",
+            'note': item.note || "",
             'date': item.get('timeFull')
           };
         })
@@ -77,9 +83,15 @@
       return data;
     },
 
+    serialized: function() {
+      return JSON.stringify(this.serialize().lections, null, '  ');
+    }.property(),
+
     reset: function() {
       console.log('reset');
-    }
+    },
+
+    toImport: ''
   });
 
   App.ApplicationView = Ember.View.extend({
@@ -102,6 +114,33 @@
       var fresh = App.lection.create({date: new Date(), title: 'Тема лекции', authorName: 'Автор'});
       App.lections.add(fresh);
       App.lections.set('selected', fresh);
-    }
+    },
+
+    doExport: function() {
+      $('#myModal').modal('show');
+    },
+
+    doImport: function() {
+      var parsed = null;
+      try {
+        parsed = JSON.parse(App.get('toImport'));
+      } catch(e) {
+        console.log(e.message);
+        App.set('importError', e.message);
+      }
+
+      if (parsed) {
+        App.lections.clear();
+        App.set('savingChanges', false);
+        localStorage.setItem('lections', JSON.stringify(parsed));
+        App.loadData();
+        App.set('savingChanges', true);
+
+        $('#myModal').modal('hide');
+        App.set('importError', '');
+      }
+    },
+
+    data: false
   });
 })();

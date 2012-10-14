@@ -72,3 +72,15 @@ body {
 	border-top: 1px dashed gray;
 	visibility: hidden;
 }
+
+.exportField {
+	height: 140px;
+}
+
+.dataModal {
+	display: none;
+}
+
+.modal-body {
+    max-height: 800px;
+}

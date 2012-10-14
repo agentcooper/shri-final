@@ -11,6 +11,7 @@
     <script type="text/javascript" src="../lib/jquery-ui-1.9.0.custom/js/jquery-ui-1.9.0.custom.min.js"></script>
     <script type="text/javascript" src="../lib/handlebars-1.0.rc.1.js"></script>
     <script type="text/javascript" src="../lib/ember-1.0.pre.min.js"></script>
+    <script type="text/javascript" src="../lib/bootstrap/js/bootstrap.min.js"></script>
 
     <script type="text/javascript" src="../lib/epiceditor/js/epiceditor.js"></script>
 
@@ -25,8 +26,37 @@
   </head>
   <body>
     <div class="container">
+
     <script type="text/x-handlebars">
+
+
+
+
     {{#view App.ApplicationView}}
+<div class="modal span6 dataModal" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-body">
+
+    <h3>Экспорт</h3>
+    <p>{{view App.ExportView class="span6 exportField"}}</p>
+
+    {{#if App.importError}}
+    <div class="alert alert-error">{{App.importError}}</div>
+    {{/if}}
+
+    <h3>Импорт</h3>
+    <p>{{view App.ImportView class="span6 exportField"}}</p>
+
+    <p><a href='#' {{action doImport}}>Поехали</a></p>
+  </div>
+</div>
+
+
+
+      
+
+
+      
+      
 
     <p></p>
     <p>
@@ -82,7 +112,9 @@
         {{/view}}
 
       {{/each}}
-    {{/view}} 
+    {{/view}}
+
+    <p class='pull-right'><a href='#' {{action doExport}}>Импорт / экспорт</a></p>
 
     {{/view}}
     </script>

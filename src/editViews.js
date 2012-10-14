@@ -140,3 +140,29 @@ App.DatePicker = Ember.TextField.extend({
     }).datepicker($.datepicker.regional["ru"]);
   }
 });
+
+App.ExportView = Ember.TextArea.extend({
+  classNameBindings: ['isSelected::hidden'],
+  isSelectedBinding: 'App.data',
+  
+  valueBinding: Ember.Binding.oneWay('App.serialized'),
+
+  didInsertElement: function() {
+    this.$().focus(function() {
+      var $this = $(this);
+      $this.select();
+
+      $this.mouseup(function() {
+        $this.unbind("mouseup");
+        return false;
+      });
+    });
+  }
+});
+
+App.ImportView = Ember.TextArea.extend({
+  classNameBindings: ['isSelected::hidden'],
+  isSelectedBinding: 'App.data',
+
+  valueBinding: 'App.toImport'
+});
