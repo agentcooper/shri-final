@@ -75,6 +75,11 @@
 
     note: null,
 
+    time: function() {
+      var date = this.get('date');
+      return date.getDate() + '.' + (date.getMonth() + 1) + '.' + date.getFullYear();
+    }.property('date'),
+
     titleStartsWith: function(start) {
       if (start.contains(' ')) {
         return this.title.toLowerCase().contains(start);
@@ -342,6 +347,44 @@
       }
 
     }.observes('App.lections.isSelected')
+  });
+
+  App.DatePicker = Ember.TextField.extend({
+    valueBinding: Ember.Binding.oneWay('selected.time'),
+
+    didInsertElement: function() {
+      var that = this;
+      // var _updateDatepicker = $.datepicker._updateDatepicker;
+      // $.datepicker._updateDatepicker = function(instance) {
+
+      //   instance.time = instance.time || "19:00";
+
+      //   _updateDatepicker.apply(this, arguments);
+
+      //   $('<input type="text"></input>').on('keydown', function() {
+      //     instance.time = $(this).val();
+
+      //     instance.input.val($.datepicker._formatDate(instance) + ' ' + instance.time);
+
+      //   }).appendTo($(instance.dpDiv)).val(instance.time);
+      //   // console.log($(instance.dpDiv));
+        
+      // };
+
+      this.$().datepicker({
+        'dateFormat': 'dd.mm.yy',
+
+        // there probably a better way to get Date object from $.datepicker
+        onSelect: function(_, instance) {
+          console.log(instance);
+          that.get('selected').set('date', new Date(
+            Number(instance.selectedYear),
+            Number(instance.selectedMonth),
+            Number(instance.selectedDay)
+          ));
+        }
+      }).datepicker($.datepicker.regional["ru"]);
+    }
   });
 
   App.ApplicationView = Ember.View.extend({
