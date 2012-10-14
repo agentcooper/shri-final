@@ -127,11 +127,14 @@ App.DatePicker = Ember.TextField.extend({
 
       // there probably a better way to get Date object from $.datepicker
       onSelect: function(_, instance) {
-        console.log(instance);
+        var old = that.get('selected').get('date');
         that.get('selected').set('date', new Date(
           Number(instance.selectedYear),
           Number(instance.selectedMonth),
-          Number(instance.selectedDay)
+          Number(instance.selectedDay),
+
+          old.getHours(),
+          old.getMinutes()
         ));
       }
     }).datepicker($.datepicker.regional["ru"]);

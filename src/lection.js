@@ -18,6 +18,11 @@ App.lection = Ember.Object.extend({
     return date.getDate() + '.' + (date.getMonth() + 1) + '.' + date.getFullYear();
   }.property('date'),
 
+  timeFull: function() {
+    var date = this.get('date');
+    return this.get('time') + ' ' + date.getHours() + ':' + date.getMinutes();
+  }.property('date'),
+
   titleStartsWith: function(start) {
     if (start.contains(' ')) {
       return this.title.toLowerCase().contains(start);

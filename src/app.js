@@ -2,23 +2,6 @@
   'use strict';
 
   window.App = Ember.Application.create({
-    boot: function() {
-      lections.reverse().forEach(function(lection) {
-        var parts = lection.date.split('.');
-        lection.date = new Date(
-          Number("20" + parts[2]),
-          Number(parts[1]) - 1,
-          Number(parts[0])
-        );
-
-        App.lections.add(App.lection.create(lection));
-      });
-
-      authors.forEach(function(author) {
-        App.authors.add(author.name, author.nick);
-      });
-    },
-
     bootstrap: function() {
       console.log('bootstraping');
 
@@ -27,29 +10,39 @@
     },
 
     ready: function() {
-      // this.bootstrap();
+      if (typeof window.localStorage !== 'undefined') {
+        if (!localStorage.getItem('firstTime')) {
+          localStorage.setItem('firstTime', true);
+
+          this.bootstrap();
+        }
+      }
+
       this.loadData();
-      // this.boot();
+
+      App.lections.addObserver('content.@each', function() {
+        App.save();
+      });
     },
 
     loadData: function() {
       if (typeof window.localStorage !== 'undefined') {
-        if (!localStorage.getItem('firstTime')) {
-          console.log('first visit');
-          localStorage.setItem('firstTime', true);
-          this.bootstrap();
-        }
-
         window._lections = JSON.parse(localStorage.getItem('lections'));
         window._authors = JSON.parse(localStorage.getItem('authors'));
 
         // reverse to check sorting
         window._lections.reverse().forEach(function(lection) {
-          var parts = lection.date.split('.');
+          var dateTime = lection.date.split(' '),
+              time = dateTime[1].split(':');
+
+          var parts = dateTime[0].split('.');
           lection.date = new Date(
-            Number("20" + parts[2]),
+            Number(parts[2]),
             Number(parts[1]) - 1,
-            Number(parts[0])
+            Number(parts[0]),
+
+            Number(time[0]),
+            Number(time[1])
           );
 
           App.lections.add(App.lection.create(lection));
@@ -59,6 +52,26 @@
           App.authors.add(author.name, author.nick);
         });
       }
+    },
+
+    save: function() {
+      var serialized = this.serialize();
+      localStorage.setItem('lections', JSON.stringify(serialized.lections));
+    },
+
+    serialize: function() {
+      var data = {
+        'lections': App.lections.get('content').map(function(item) {
+          return {
+            'authorName': item.authorName,
+            'title': item.title,
+            'note': item.note,
+            'date': item.get('timeFull')
+          };
+        })
+      };
+
+      return data;
     },
 
     reset: function() {
