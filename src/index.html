@@ -29,34 +29,23 @@
 
     <script type="text/x-handlebars">
 
-
-
-
     {{#view App.ApplicationView}}
-<div class="modal span6 dataModal" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-  <div class="modal-body">
+    <div class="modal span6 dataModal" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+      <div class="modal-body">
 
-    <h3>Экспорт</h3>
-    <p>{{view App.ExportView class="span6 exportField"}}</p>
+        <h3>Экспорт</h3>
+        <p>{{view App.ExportView class="span6 exportField"}}</p>
 
-    {{#if App.importError}}
-    <div class="alert alert-error">{{App.importError}}</div>
-    {{/if}}
+        {{#if App.importError}}
+        <div class="alert alert-error">{{App.importError}}</div>
+        {{/if}}
 
-    <h3>Импорт</h3>
-    <p>{{view App.ImportView class="span6 exportField"}}</p>
+        <h3>Импорт</h3>
+        <p>{{view App.ImportView class="span6 exportField"}}</p>
 
-    <p><a href='#' {{action doImport}}>Поехали</a></p>
-  </div>
-</div>
-
-
-
-      
-
-
-      
-      
+        <p><a href='#' {{action doImport}}>Поехали</a></p>
+      </div>
+    </div>
 
     <p></p>
     <p>
