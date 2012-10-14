@@ -48,7 +48,7 @@
         App.authors.add(author.name, author.nick);
       });
 
-      lections.forEach(function(lection) {
+      lections.reverse().forEach(function(lection) {
         var parts = lection.date.split('.');
         lection.date = new Date(
           Number("20" + parts[2]),
@@ -160,33 +160,33 @@
     content: [],
 
     add: function(lection) {
-      this.pushObject(lection);
+      this.addObject(lection);
     },
 
     showLecturers: true,
 
     selected: null,
 
-    sort: "desc",
+    sortProperties: ['date'],
 
     filterBy: '',
 
-    filtered: Ember.computed('content', function() {  
-      console.log('filter');
+    filtered: function() {
+      var that = this,
+          filterBy = this.filterBy;
 
-      var filterBy = this.get('filterBy').toLowerCase();
       if (!filterBy) {
-        return this.content;
+        return this.get('arrangedContent');
       }
 
-      return this.filter(function(item, idx, en) {
+      return this.get('arrangedContent').filter(function(item) {
         var author = item.get('author');
         return (item.titleStartsWith(filterBy) ||
             item.hasText(filterBy) ||
             (author && author.startsWith(filterBy)) ||
             (author.nick && author.nick.toLowerCase().startsWith(filterBy)));
       });
-    }).property('filterBy', 'content.@each').cacheable()
+    }.property('content', 'filterBy').cacheable(),
   });
 
 
