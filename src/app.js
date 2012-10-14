@@ -3,7 +3,7 @@
 
   window.App = Ember.Application.create({
     bootstrap: function() {
-      console.log('bootstraping');
+      // console.log('bootstraping');
 
       if (typeof window.localStorage !== 'undefined') {
         localStorage.setItem('lections', JSON.stringify(lections));
@@ -88,7 +88,7 @@
     }.property(),
 
     reset: function() {
-      console.log('reset');
+      // console.log('reset');
     },
 
     toImport: ''
