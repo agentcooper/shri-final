@@ -26,7 +26,7 @@
       return;
     }
 
-    return "&laquo;&hellip;" + value + "&hellip;&raquo;";
+    return "<span class='blah'>&laquo;&hellip;</span>" + value + "<span class='blah'>&hellip;&raquo;</span>";
   });
 
   function equals(prop, value) {
